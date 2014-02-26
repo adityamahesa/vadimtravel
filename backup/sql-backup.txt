@@ -1,0 +1,16 @@
+SELECT * FROM `vadimtravel.travel_order`
+INNER JOIN vadimtravel.travel_regional USING (id_travel_regional)
+INNER JOIN vadimtravel.travel_detail_order USING (id_travel_order)
+INNER JOIN vadimtravel.status_travel USING (id_status_travel)
+INNER JOIN vadimtravel.travel_tujuan USING (id_travel_tujuan);
+
+SELECT `travel_order`.`id_travel_order`, `travel_order`.`nama`, `travel_order`.`alamat`,
+`travel_regional`.`regional`, `travel_order`.`telp`, `travel_order`.`tgl_transaksi`,
+`travel_order`.`tgl_berangkat`, `travel_order`.`jam_berangkat`, `travel_tujuan`.`tujuan`,
+`travel_detail_order`.`id_status_travel`, `travel_detail_order`.`charge`,
+(`travel_regional`.`harga` + `travel_tujuan`.`harga` + `travel_detail_order`.`charge`) AS `bayar`
+FROM `travel_order`, `travel_regional`, `travel_detail_order`, `status_travel`, `travel_tujuan`
+WHERE `travel_order`.`id_travel_regional` = `travel_regional`.`id_travel_regional`
+AND `travel_detail_order`.`id_travel_order` = `travel_order`.`id_travel_order`
+AND `travel_detail_order`.`id_status_travel` = `status_travel`.`id_status_travel`
+AND `travel_detail_order`.`id_travel_tujuan` = `travel_tujuan`.`id_travel_tujuan`;
